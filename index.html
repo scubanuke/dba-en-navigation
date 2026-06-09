@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBA-EN: Energy Sector Design Basis Series</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #0A1628;
+    --deep:    #1A3A5C;
+    --steel:   #6B8FAF;
+    --amber:   #C8893A;
+    --off:     #F0F4F8;
+    --white:   #FFFFFF;
+    --text:    #1C2B3A;
+    --muted:   #5A7285;
+    --border:  #D0DCE8;
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--off);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+
+  .series-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 14px;
+  }
+
+  header h1 {
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: normal;
+    line-height: 1.25;
+    color: var(--white);
+    max-width: 700px;
+    margin: 0 auto 16px;
+  }
+
+  header h1 span {
+    color: var(--amber);
+    font-style: italic;
+  }
+
+  .tagline {
+    font-size: 15px;
+    color: var(--steel);
+    max-width: 600px;
+    margin: 0 auto 28px;
+    font-style: italic;
+  }
+
+  .author-line {
+    font-size: 13px;
+    color: #7A9AB8;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* ── BRANCH RULE ── */
+  .branch-rule {
+    display: block;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 64px;
+  }
+
+  /* ── ROUTING SECTION ── */
+  .routing-intro {
+    text-align: center;
+    padding: 40px 0 24px;
+  }
+
+  .routing-intro h2 {
+    font-size: 13px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 8px;
+  }
+
+  .routing-intro p {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  .routing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 28px 0 48px;
+  }
+
+  .route-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--amber);
+    padding: 22px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.15s, transform 0.15s;
+    display: block;
+  }
+
+  .route-card:hover {
+    box-shadow: 0 4px 20px rgba(10,22,40,0.12);
+    transform: translateY(-2px);
+  }
+
+  .route-card .route-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .route-card h3 {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--deep);
+    margin-bottom: 6px;
+  }
+
+  .route-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── SECTOR SECTION ── */
+  .sector {
+    margin-bottom: 48px;
+  }
+
+  .sector-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    border-bottom: 2px solid var(--deep);
+    padding-bottom: 10px;
+    margin-bottom: 6px;
+  }
+
+  .sector-code {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--amber);
+    font-weight: bold;
+  }
+
+  .sector-header h2 {
+    font-size: 20px;
+    font-weight: normal;
+    color: var(--deep);
+  }
+
+  .sector-summary {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 18px;
+    padding-left: 2px;
+  }
+
+  .doc-list {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .doc-list thead tr {
+    background: var(--deep);
+    color: var(--white);
+  }
+
+  .doc-list thead th {
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  .doc-list tbody tr {
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    transition: background 0.1s;
+  }
+
+  .doc-list tbody tr:hover {
+    background: #EDF3F8;
+  }
+
+  .doc-list tbody tr.framework-row {
+    background: #EDF3F8;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .doc-list td {
+    padding: 11px 14px;
+    font-size: 14px;
+    vertical-align: top;
+  }
+
+  .doc-list td:first-child {
+    width: 44%;
+  }
+
+  .doc-list td:nth-child(2) {
+    width: 12%;
+  }
+
+  .doc-list td:last-child {
+    width: 44%;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .doc-link {
+    color: var(--deep);
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .doc-link:hover {
+    color: var(--amber);
+    text-decoration: underline;
+  }
+
+  .ver {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    color: var(--steel);
+    background: #EDF3F8;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  .badge {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-active { background: #D4EDDA; color: #1A5E2A; }
+  .badge-framework { background: #D0E0EE; color: #1A3A5C; }
+  .badge-companion { background: #FEF3E2; color: #7A4A10; }
+  .badge-deferred { background: #F5F5F5; color: #888; }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── COMPANION SECTION ── */
+  .companions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .companion-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--steel);
+    padding: 14px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.15s;
+  }
+
+  .companion-card:hover {
+    border-left-color: var(--amber);
+  }
+
+  .companion-card .ctitle {
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--deep);
+    margin-bottom: 3px;
+  }
+
+  .companion-card .cdesc {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: #7A9AB8;
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+  }
+
+  footer strong {
+    color: var(--amber);
+  }
+
+  @media (max-width: 600px) {
+    .routing-grid { grid-template-columns: 1fr 1fr; }
+    .doc-list td:last-child { display: none; }
+    .doc-list thead th:last-child { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <p class="series-label">DBA-EN · Energy Sector · Design Basis Series</p>
+  <h1>Design Basis Accident —<br><span>Military Action</span></h1>
+  <p class="tagline">The first formal Design Basis framework for deliberate military action against U.S. critical energy infrastructure — electric, natural gas, and petroleum.</p>
+  <p class="author-line">Timothy E. Roxey · Eclectic Technologies · June 2026</p>
+</header>
+
+<!-- ═══ BRANCH SVG ═══ -->
+<svg class="branch-rule" viewBox="0 0 900 28" height="28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <line x1="0" y1="14" x2="380" y2="14" stroke="#1A3A5C" stroke-width="1.5"/>
+  <line x1="380" y1="14" x2="450" y2="14" stroke="#C8893A" stroke-width="2"/>
+  <circle cx="450" cy="14" r="4" fill="#C8893A"/>
+  <line x1="450" y1="14" x2="450" y2="4"  stroke="#C8893A" stroke-width="1.5"/>
+  <line x1="450" y1="4"  x2="260" y2="4"  stroke="#C8893A" stroke-width="1.5"/>
+  <line x1="450" y1="14" x2="640" y2="14" stroke="#C8893A" stroke-width="1.5"/>
+  <line x1="450" y1="14" x2="450" y2="24" stroke="#C8893A" stroke-width="1.5"/>
+  <line x1="450" y1="24" x2="640" y2="24" stroke="#C8893A" stroke-width="1.5"/>
+  <circle cx="260" cy="4"  r="3" fill="#C8893A"/>
+  <circle cx="640" cy="14" r="3" fill="#C8893A"/>
+  <circle cx="640" cy="24" r="3" fill="#C8893A"/>
+  <line x1="640" y1="14" x2="900" y2="14" stroke="#1A3A5C" stroke-width="1.5"/>
+</svg>
+
+<!-- ═══ MAIN ═══ -->
+<main>
+
+  <!-- ROUTING -->
+  <div class="routing-intro">
+    <h2>Start Here</h2>
+    <p>Select the path that best describes your role and what you are looking for.</p>
+  </div>
+
+  <div class="routing-grid">
+    <a class="route-card" href="#series-intro">
+      <span class="route-icon">📖</span>
+      <h3>New to the Series</h3>
+      <p>Read the Series Introduction first — the framework's purpose, methodology, and document architecture in plain terms.</p>
+    </a>
+    <a class="route-card" href="#electric">
+      <span class="route-icon">⚡</span>
+      <h3>Electric Sector</h3>
+      <p>Generation, transmission, distribution, and control-company infrastructure. NERC CIP territory.</p>
+    </a>
+    <a class="route-card" href="#gas">
+      <span class="route-icon">🔥</span>
+      <h3>Natural Gas Sector</h3>
+      <p>Transmission pipelines, processing, underground storage, and local distribution.</p>
+    </a>
+    <a class="route-card" href="#oil">
+      <span class="route-icon">🛢</span>
+      <h3>Petroleum Sector</h3>
+      <p>Refining, offshore production, terminals, and trunk pipelines.</p>
+    </a>
+  </div>
+
+  <!-- ═══ SERIES INTRODUCTIONS ═══ -->
+  <div class="sector" id="series-intro">
+    <div class="sector-header">
+      <span class="sector-code">START HERE</span>
+      <h2>Series Introduction Documents</h2>
+    </div>
+    <p class="sector-summary">Read these first. They establish the conceptual foundation, the gap these documents fill, and the document architecture — written for anyone who needs to engage with this series regardless of technical background.</p>
+    <table class="doc-list">
+      <thead>
+        <tr>
+          <th>Document</th>
+          <th>Version</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="framework-row">
+          <td><a class="doc-link" href="https://docs.google.com/document/d/1zxO_t9xdZpX4MaXliPWbi1kXBthd2xkZ/edit?usp=drive_link&ouid=108573614465816423530&rtpof=true&sd=true">DBA-EN Series Introduction</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>The Energy sector series — why it was built, what is analytically new, how the AI governance design basis works, and the complete document inventory. <strong>Start here.</strong></td>
+        </tr>
+        <tr class="framework-row">
+          <td><a class="doc-link" href="https://docs.google.com/document/d/1kiu9XygnN1B_NbvMp8Jv5jQwqkOof-OC/edit?usp=drive_link&ouid=108573614465816423530&rtpof=true&sd=true">DBA-MA Introduction</a></td>
+          <td><span class="ver">v1.9</span></td>
+          <td>The parent series introduction covering the nuclear Design Basis Accident framework and the methodology that the DBA-EN energy series inherits and extends.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://docs.google.com/document/d/1WUq1PrEnrpKmFess2ntmC87KoeTCbJlX/edit?usp=drive_link&ouid=108573614465816423530&rtpof=true&sd=true">DBA-EN-SF: Energy Sector Framework</a></td>
+          <td><span class="ver">v0.3</span></td>
+          <td>The governing parent document for all three sub-sector series. Establishes the DB→DBA→DBA-MA three-layer progression, cross-sector cascade, and the Bright Line requirement series-wide.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1BPDU3PlLUw0M2tIJU2LtTwvvg8HdrXCY/view?usp=drive_link">DBA-MA ONG Series Introduction</a></td>
+          <td><span class="ver">v1.0 FINAL</span></td>
+          <td>Predecessor orientation document for the oil and natural gas series.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ═══ ELECTRIC SECTOR ═══ -->
+  <div class="sector" id="electric">
+    <div class="sector-header">
+      <span class="sector-code">DBA-ES</span>
+      <h2>Electric Sector</h2>
+    </div>
+    <p class="sector-summary">Eleven facility-class instruments covering generation, transmission, distribution, and control-company infrastructure whose primary consequence chain runs through the bulk electric system.</p>
+    <table class="doc-list">
+      <thead>
+        <tr><th>Document</th><th>Version</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="framework-row">
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1aG_b1OK-KVnpzvqgjRyxVscvy_pjqAKV/view?usp=drive_link">DBA-ES Sector Framework</a></td>
+          <td><span class="ver">v0.8</span></td>
+          <td>Electric sub-sector parent. GenCo / TransCo / DisCo / CntlCo taxonomy, RT_HVLLC metric, GN sub-series register.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1bujz44LsQn7QMNi5yYMEWjrZ5DdNoVq0/view?usp=drive_link">DBA-DC: Hyperscale Data Center</a></td>
+          <td><span class="ver">v1.6</span></td>
+          <td>Origin instrument for the Bright Line and Command Broker architecture applied throughout this series. &gt;100 MW IT load.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1lZ6cW8IswgR26gNn2nGw4Mw3MlEYdDNh/view?usp=drive_link">DBA-ES-HY-FC1: Large Hydroelectric Storage</a></td>
+          <td><span class="ver">v0.4</span></td>
+          <td>Bulk generation and downstream dam-failure consequence chain. &gt;500 MW.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1qhl49bJMPZOOERGvlbnRpDaTXprQCTwa/view?usp=drive_link">DBA-ES-TX-FC2: EHV Transmission Substation</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>345–500 kV metropolitan ring configuration. RT_HVLLC: large power transformer 18–24 months. CIP-014 reference facility class.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1LE8u-fFlCDJSJYm5mKHRoak9ypuyO5Ah/view?usp=drive_link">DBA-ES-TX-FC3: HVDC Interconnect</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>&gt;2,000 MW cross-interconnection. Governing metric: TCI. RT_HVLLC: converter transformer 12–18 months.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1QoL4hYdgVePfVrWjngPC_S1vSHHCPnB1/view?usp=drive_link">DBA-ES-GC-FC4: Gas-Electric Cascade Compressor Station</a></td>
+          <td><span class="ver">v0.2</span></td>
+          <td>Interstate pipeline compressor stations in GenCo supply corridors. Governing metric: GSD. The gas-electric cascade from the electric sector's perspective.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1NZreyGDVZBuWZnlkdFr7aLxwCckn1IZV/view?usp=drive_link">DBA-ES-DI-FC5: Distribution Substation with Edge Generation</a></td>
+          <td><span class="ver">v0.1</span> <span class="badge badge-deferred">DB layer only</span></td>
+          <td>Islanding-capable distribution substations serving defense-critical loads. DBA and MA extension deferred to v0.2.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1l6B8VAeqPITD_UhPuQO0ApixmTlmfcwO/view?usp=drive_link">DBA-ES-CntlCo: Control-Company Functional Class</a></td>
+          <td><span class="ver">v0.1</span> <span class="badge badge-deferred">DB layer only</span></td>
+          <td>Balancing Authority / RC / TOP functional class. DBA and MA extension deferred to v0.2.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1CPdrBhJj-ufWYhdEqStOj3D8erHzN2xO/view?usp=drive_link">DBA-ES-GN-FC6: Coal-Fired Generation</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>&gt;750 MW or must-run / transmission-essential. RT_HVLLC: supercritical turbine rotor 22–30 months — longest in the generation series. Coal supply interdiction and CCR impoundment cascade scenarios.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1xLjgseOUn8I30iIsn2NohzbDIV1EQtQf/view?usp=drive_link">DBA-ES-GN-FC7: Oil-Fired Generation and Peakers</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>&gt;100 MW or RMR designation. Backstop removal attack and fuel inventory depletion via spurious automated dispatch. Northeast winter compound scenario.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1NgUt7SIB7jjfRpcC832tzE_k1POJ9Naj/view?usp=drive_link">DBA-ES-GN-FC8: Renewable Generation and BESS</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>Utility-scale solar, onshore/offshore wind, BESS. Inverter firmware attack as supply-chain-primary DBA-MA scenario. Inverter firmware trustworthiness as Bright Line precondition — series first.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ═══ NATURAL GAS ═══ -->
+  <div class="sector" id="gas">
+    <div class="sector-header">
+      <span class="sector-code">DBA-GAS</span>
+      <h2>Natural Gas Sector</h2>
+    </div>
+    <p class="sector-summary">Four facility-class instruments covering the full natural gas supply chain from transmission through local delivery to the residential meter, plus a policy companion and LNG use case.</p>
+    <table class="doc-list">
+      <thead>
+        <tr><th>Document</th><th>Version</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="framework-row">
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1McnnMedMg6Q5HhEBIcyH75iYCHb2oeEx/view?usp=drive_link">DBA-GAS Sector Framework</a></td>
+          <td><span class="ver">v1.6</span></td>
+          <td>Natural gas sub-sector parent governing all DBA-GAS facility-class instruments.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1pqUBSoCe9AxS_05I-1vxncPT9XQRA5Vu/view?usp=drive_link">DBA-GAS-FC1: Natural Gas Transmission</a></td>
+          <td><span class="ver">v1.5</span></td>
+          <td>The most mature GAS instrument. Interstate pipeline and compressor stations. Gas-electric cascade from the gas sector's perspective.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/19NZCqBGEjndE5tFM27LrZMw48qfeVVlo/view?usp=drive_link">DBA-GAS-FC2: Natural Gas Processing</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>Series-first: the optimization-safety boundary as a formal Design Basis requirement. Dual consequence chain — gas supply and NGL petrochemical feedstock simultaneously.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/16RwH-sSfOeUXEnp5EvSj9ifEkalWa3Pf/view?usp=drive_link">DBA-GAS-FC3: Underground Storage</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>Depleted reservoir and salt cavern. Sprint/endurance distinction. Inventory depletion via ML scheduling manipulation — the invisible drain scenario.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/13MEOT2ExV5AUYUF4VW3A8dLPtVopgi0Y/view?usp=drive_link">DBA-GAS-FC4: Local Distribution</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>LDC city gate to end-use. Direct residential life-safety consequence. The re-pressurization workforce constraint as the governing recovery metric — unique to this facility class.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1ybqx9mqGpII61-zhzXhNZ3rdVmEDj7y_/view?usp=drive_link">DBA-GAS-UC-LNG: LNG Terminal Use Case</a></td>
+          <td><span class="ver">v1.1</span></td>
+          <td>LNG import and export terminal use case.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1wwJObJdgqNZRp7snU9atkmLQyT6gMxS7/view?usp=drive_link">DBA-GAS-POL-Deterrence</a></td>
+          <td><span class="ver">v1.2</span></td>
+          <td>Policy companion — deterrence framework for natural gas infrastructure protection.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ═══ PETROLEUM ═══ -->
+  <div class="sector" id="oil">
+    <div class="sector-header">
+      <span class="sector-code">DBA-OIL</span>
+      <h2>Petroleum Sector</h2>
+    </div>
+    <p class="sector-summary">Four facility-class instruments covering the full petroleum supply chain from offshore wellhead through refining, storage, and pipeline transport to the consumer market.</p>
+    <table class="doc-list">
+      <thead>
+        <tr><th>Document</th><th>Version</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr class="framework-row">
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1E119HsMuqbhX6Q6_FMM3L3Yh6ZzjOBK4/view?usp=drive_link">DBA-OIL Sector Framework</a></td>
+          <td><span class="ver">v1.6</span></td>
+          <td>Petroleum sub-sector parent governing all DBA-OIL facility-class instruments.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1pUgIJk8AxrWNoq0pXCKU5O_8gJkMzBHL/view?usp=drive_link">DBA-OIL-FC1: Petroleum Refining</a></td>
+          <td><span class="ver">v1.2</span></td>
+          <td>The most mature OIL instrument. Multi-product consequence chain, HF alkylation toxic consequence envelope, DCS compromise scenarios.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1pGnMJu5mBrD_EKewbhZqZTQtrlI_Yfa2/view?usp=drive_link">DBA-OIL-FC2: Offshore Crude Production</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>GoM deepwater platforms. Maritime threat profile. Offshore construction vessel as governing recovery constraint. Nord Stream subsea sabotage template applied.</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1ZasxQS2xxf8RBv6kYnoPRYDasxoiiFjq/view?usp=drive_link">DBA-OIL-FC3: Terminals and Storage</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>The terminal as logistics bridge. Colonial Pipeline origin complex (Scenario A), marine terminal compound spill (Scenario B), Northeast heating oil seasonal timing attack (Scenario C).</td>
+        </tr>
+        <tr>
+          <td><a class="doc-link" href="https://drive.google.com/file/d/1pyTkkbjNjg10S_NdLS2oGcvFiQftSpmk/view?usp=drive_link">DBA-OIL-FC4: Crude and Product Transport</a></td>
+          <td><span class="ver">v0.1</span></td>
+          <td>Trunk and product pipelines. The voluntary shutdown problem. Hormuz closure as compound timing amplifier for Scenario C.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ═══ AI GOVERNANCE ═══ -->
+  <div class="sector">
+    <div class="sector-header">
+      <span class="sector-code">AI GOVERNANCE</span>
+      <h2>AI Governance Design Basis — Energy Sector</h2>
+    </div>
+    <p class="sector-summary">The DBA-EN series is the first infrastructure design basis framework in any sector to require a formal AI governance design basis for every facility class across all three sub-sectors. The framework addresses the full AI control plane: deterministic ML systems operating autonomously below the Bright Line; Gen AI advisory tools requiring human Command Broker oversight above it; the optimization-safety boundary where commercial process optimization erodes safety margins; the inventory depletion attack surface in automated scheduling systems; and the supply chain trustworthiness precondition for inverter-based generation resources. The Command Broker architecture is the enforcement mechanism at the Bright Line — one part of a governance framework that was built into the series from the beginning, not added reactively.</p>
+
+    <table class="doc-list" style="margin-bottom:18px;">
+      <thead>
+        <tr><th>Governance Principle</th><th>Where Established</th><th>What It Requires</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>The Bright Line</strong></td>
+          <td><span class="ver">DBA-DC v1.6</span></td>
+          <td>Formal boundary between autonomous ML (deterministic, formally testable — permitted below) and Gen AI (non-deterministic — Command Broker required above). Applied to every facility class in the series.</td>
+        </tr>
+        <tr>
+          <td><strong>Optimization-safety boundary</strong></td>
+          <td><span class="ver">DBA-GAS-FC2</span></td>
+          <td>In continuous-process facilities, the Bright Line must constrain the plant's own commercial optimization logic — not only adversarial manipulation. Advanced Process Control (APC) and Real-Time Optimization (RTO) envelopes must include safety margin setbacks from SIS trip points, enforced by architecture. Series first.</td>
+        </tr>
+        <tr>
+          <td><strong>Inventory depletion attack surface</strong></td>
+          <td><span class="ver">DBA-GAS-FC3 / FC7</span></td>
+          <td>ML scheduling systems governing storage inventory and automated dispatch are simultaneously the attack surface for undetectable resource depletion. Cumulative pattern analysis — not just individual transaction authorization — is a security requirement.</td>
+        </tr>
+        <tr>
+          <td><strong>Firmware trustworthiness as Bright Line precondition</strong></td>
+          <td><span class="ver">DBA-ES-GN-FC8</span></td>
+          <td>An inverter operating on unverified firmware cannot be treated as a below-Bright-Line autonomous ML system regardless of apparent normal behavior. Independent firmware verification is a precondition for autonomous IBR operation. Applies to ~80–85% of deployed U.S. utility inverters by manufacturer origin. Series first.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:13px; color:var(--muted); margin-bottom:16px; font-style:italic;">Command Broker implementation documents — the architectural instruments that enforce the above-Bright-Line governance requirement:</p>
+
+    <div class="companions-grid">
+      <a class="companion-card" href="https://drive.google.com/file/d/1zlQYtMI_UnqgUOcCpPu1gTrNkmpRiEgT/view?usp=drive_link">
+        <div class="ctitle">CB-Framework: Cross-Sector</div>
+        <div class="cdesc">v0.1 — Bright Line principle, three-tier criticality framework, Command Broker / Influencer Broker distinction. The foundational governance architecture document.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1AyxrW_U09msZRC4qZ3z-Ar66j4oSw6Dq/view?usp=drive_link">
+        <div class="ctitle">Command Broker Implementation Guide</div>
+        <div class="cdesc">v0.1 — Practical implementation of the Bright Line and Command Broker architecture across facility classes.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1YeZa9RQ-jKEeMaIoXA7-aDE6McH_Zu30/view?usp=drive_link">
+        <div class="ctitle">CB-IB Qualification Standard</div>
+        <div class="cdesc">v0.1 — Influencer Broker qualification requirements for above-Bright-Line advisory functions.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1TvGEpY89GcvcIwDMtscS7xFil9hXL-2o/view?usp=drive_link">
+        <div class="ctitle">CB-UC-1: BA Integrated Interface</div>
+        <div class="cdesc">v0.1 — Command Broker use case for Balancing Authority integrated interface operations.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1GZteXYkofS_hgdl02pzzwfH7T13u7oZc/view?usp=drive_link">
+        <div class="ctitle">GenAI Risk in ICS</div>
+        <div class="cdesc">V29 — GenAI risk analysis for industrial control systems. Foundational evidentiary reference for the AI governance design basis across the DBA-EN series.</div>
+      </a>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ═══ COMPANION DOCUMENTS ═══ -->
+  <div class="sector">
+    <div class="sector-header">
+      <span class="sector-code">SUPPORTING</span>
+      <h2>Companion and Reference Documents</h2>
+    </div>
+    <p class="sector-summary">Technical foundation documents, policy papers, and cross-sector analytical instruments that the DBA-EN series draws upon.</p>
+    <div class="companions-grid">
+      <a class="companion-card" href="https://drive.google.com/file/d/1TbGmIgAs8dYHoZyB72qS71k3gCoj6xOA/view?usp=drive_link">
+        <div class="ctitle">GenMix Optimization Whitepaper</div>
+        <div class="cdesc">v0.3 — Origin of the RT_HVLLC metric. Table 1 RT_HVLLC values for all generation types.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/15rflXYm9seL_KIRgFN16KLMbxCzt6hKd/view?usp=drive_link">
+        <div class="ctitle">Predictive UFLS Ride-Through</div>
+        <div class="cdesc">v0.3 — PMU and under-frequency load shedding position paper.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1X8bCPK6zguTq7JmJ1z0cZGTbE26etBff/view?usp=drive_link">
+        <div class="ctitle">DBA-UxS: Cross-Sector Uncrewed Systems</div>
+        <div class="cdesc">v1.1 — Uncrewed systems threat framework covering UAS, USV, and UUV domains.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1VuPjcN9bln--Ly9Cza9Rmm6A0BAfE_F_/view?usp=drive_link">
+        <div class="ctitle">DBA-MA-UxS-NA: Nuclear Annex</div>
+        <div class="cdesc">v1.1 — Nuclear implementation of the cross-sector UxS framework.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1S9Rc3yhsqmIjZ0ZCvVZvIvrWtuFSaFwY/view?usp=drive_link">
+        <div class="ctitle">UA Grid Defense: Cyber-Kinetic</div>
+        <div class="cdesc">v1.0 — Ukrainian grid defense analysis. Primary evidentiary anchor for DBA-ES kinetic attack scenarios.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/10JhIhSG2X0y-JdTkmvqJPfUG0PcHWY9k/view?usp=drive_link">
+        <div class="ctitle">Powering the Always-On Economy</div>
+        <div class="cdesc">v0.4 — Energy sector policy context.</div>
+      </a>
+      <a class="companion-card" href="https://drive.google.com/file/d/1jQVJG6ejX5cLFlllQpkbuTv6t2581q-1/view?usp=drive_link">
+        <div class="ctitle">Fuel Cell Position Paper</div>
+        <div class="cdesc">v0.1 — Fuel cell generation technology position.</div>
+      </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <p><strong>DBA-EN Energy Sector Design Basis Series</strong></p>
+  <p>Timothy E. Roxey · Eclectic Technologies · June 2026</p>
+  <p style="margin-top:10px; color:#4A6A88;">All documents are DRAFT. Issued for review by engineers, regulators, asset owners, and policy analysts<br>responsible for protecting energy sector critical infrastructure.</p>
+</footer>
+
+</body>
+</html>
